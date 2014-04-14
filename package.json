@@ -1,0 +1,17 @@
+{
+  "name": "medfusion-appointments",
+  "version": "0.0.0",
+  "author": "Steven Pautz <spautz@gmail.com>",
+  "description": "",
+  "private": true,
+  "scripts": {
+    "postinstall": "bower install",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+    "express": "4.x",
+    "jshint": "2.x"
+  }
+}
