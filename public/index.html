@@ -12,5 +12,22 @@
 
   <h1>Hello World</h1>
 
+
+  <script type="text/javascript">
+    window.appConfig = {
+      // @TODO: cachebuster, debug level, etc go here
+    };
+  </script>
+  <script type="text/javascript" src="/steal/steal.js?,development"></script>
+  <script>
+    // nothing to steal yet
+    window.steal && window.steal(function () {
+      'use strict';
+
+      console.log('Hello World');
+    });
+
+  </script>
+
 </body>
 </html>
