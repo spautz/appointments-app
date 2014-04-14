@@ -10,23 +10,44 @@
 </head>
 <body>
 
-  <h1>Hello World</h1>
-
+  <div id="appointments-app">
+    Loading...
+  </div>
 
   <script type="text/javascript">
     window.appConfig = {
       // @TODO: cachebuster, debug level, etc go here
     };
   </script>
-  <script type="text/javascript" src="/steal/steal.js?,development"></script>
+  <!--
+    To load files as-needed in dev:
+      src="/steal/steal.js?appointments-app,development"
+    To use the combined+minified build in production:
+      src="/steal/steal.production.js?appointments-app,production"
+  -->
+  <script type="text/javascript" src="/steal/steal.js?appointments-app,development"></script>
   <script>
-    // nothing to steal yet
-    window.steal && window.steal(function () {
+    (function(window, steal) {
       'use strict';
 
-      console.log('Hello World');
-    });
+      function pageLoadError() {
+        // Presumably, a function named 'pageLoadError' would do something more useful than this.
+        console.error('Unable to initialize page');
+      }
 
+      if (steal) {
+        steal('appointments-app', function (AppointmentsApp) {
+          if (AppointmentsApp) {
+            // For debugging convenience only, we keep a reference to the app's root control
+            window.appInstance = new AppointmentsApp('#appointments-app', {});
+          } else {
+            pageLoadError();
+          }
+        });
+      } else {
+        pageLoadError();
+      }
+    }(window, window.steal));
   </script>
 
 </body>
