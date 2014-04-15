@@ -1,1 +1,26 @@
-<h1>Hello World</h1>
+<h1>Your Appointments</h1>
+
+{{#if showAppointmentCreateForm}}
+  {{>appointmentCreateForm}}
+{{else}}
+  <a href="/appointment/new" class="btn btn-info">
+    Request Appointment
+  </a>
+{{/if}}
+
+{{#if appointmentsList.length}}
+  <ul>
+    {{#each appointmentsList}}
+      <li>
+        {{doctor}}
+        {{#if selected}}
+          (selected)
+        {{/if}}
+      </li>
+    {{/each}}
+  </ul>
+{{else}}
+  <div class="alert alert-info">
+    You have not scheduled any appointments yet.
+  </div>
+{{/if}}

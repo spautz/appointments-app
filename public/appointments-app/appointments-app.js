@@ -5,12 +5,13 @@ steal(
 
     // Local views
     './appointments-app.mustache',
+    './appointment-create-form.mustache',
 
     // Some useful canjs plugins
     'can/construct/super',
     'can/route/pushstate',
 
-    function (can, $, _, layoutTmpl) {
+    function (can, $, _, layoutTmpl, appointmentCreateFormTmpl) {
         'use strict';
 
         // This is the top-level control for the app: it handles routing and the initial
@@ -26,25 +27,55 @@ steal(
         // instead of offloaded to a routes.js. They're at the very bottom of this file.
 
 
-        ///////////////////////////////////////////////////////////////////
-        // Local data/scope: normally we'd never have these floating around outside a component,
-        // but it's cheap and easy for this demo.
+        ///////////////////////////////////////////////////////////////////////////////////////////
+        // Local data/scope
+        // Normally we'd never have these floating around outside a component, but it's cheap
+        // and easy for this demo.
+
         // @TODO: Real models and fixtures
         var appointmentList = new can.List([
             {
                 id: 1,
-                datetime: new Date('2009'),
-                doctor: 'Dr. Alice'
+                note: 'Annual checkup',
+                date: new Date(2011, 1, 10, 1, 0),
+                doctor: 'Dr. Charlotte'
             }, {
                 id: 2,
-                datetime: new Date('2012'),
+                note: 'Annual checkup',
+                date: new Date(2012, 2, 15, 12, 0),
                 doctor: 'Dr. Bob'
+            }, {
+                id: 3,
+                note: 'Annual checkup',
+                date: new Date(2013, 4, 5, 8, 0),
+                doctor: 'Dr. Bob'
+            }, {
+                id: 4,
+                note: 'Interview',
+                date: new Date(2014, 3, 9, 12, 15),
+                doctor: 'Dr. Alice'
             }
         ]);
-        // This tracks the appointment we're viewing details for, if any
-        var appointmentSelected = can.compute(null);
+        // This tracks the appointment we're viewing details for, if any.
+        // This gets called as a setter only; it basically just ensures we only have one
+        // appointment selected at a given time.
+        var appointmentSelected = can.compute(null, function(newVal, oldVal) {
+            // deselect the old, select the new
+            console.log('appointmentSelected()', arguments, this);
+            if (oldVal) {
+                oldVal.attr('selected', false);
+            }
+            if (newVal) {
+                newVal.attr('selected', true);
+            }
+            return newVal;
+        });
         // This tracks whether or not the "Request Appointment" form is displayed
         var showAppointmentCreateForm = can.compute(false);
+
+
+        ///////////////////////////////////////////////////////////////////////////////////////////
+        // Control definition
 
         return can.Control.extend({
             // static properties would go here, if we had any
@@ -52,14 +83,16 @@ steal(
             // prototype properties
 
             init: function() {
-                console.info('AppointmentsApp.init()', arguments, this);
-
                 // Manual rendering is awkward and weird. Let's do it anyway.
                 this.element.html(
                     layoutTmpl({
                         appointmentsList: appointmentList,
                         appointmentSelected: appointmentSelected,
                         showAppointmentCreateForm: showAppointmentCreateForm
+                    }, {
+                        partials: {
+                            appointmentCreateForm: appointmentCreateFormTmpl
+                        }
                     })
                 );
 
@@ -68,22 +101,50 @@ steal(
             },
 
             /**
+             * This is just sugar for returning to the App's default view.
+             * We update the route, which triggers setAppState.
+             */
+            goHome: function() {
+                window.history.pushState({}, '', '/');
+            },
+
+            /**
              * Everything is driven by the app state, which (usually) comes from the route.
              * The route gets translated to a params object (which we treat as the app state)
              * then this function's job is to do the lower-level work to update our observables
              * to match and reflect that app state: translating data into semantics.
              *
+             * To set app state, it's (usually) better to use window.location.pushState()
+             * instead of calling this function.
+             *
              * @param Object
              */
             setAppState: function(state) {
                 state = state || {};
+                can.batch.start();
 
-                // @TODO
+                // select a new appointment (if any), or deselect the old
+                if (state.id) {
+                    appointmentSelected(_.findWhere(
+                        appointmentList,
+                        { id: parseInt(state.id, 10) }
+                    ));
+                } else {
+                    appointmentSelected(null);
+                }
 
-                console.info('setAppState: ', state);
+                // This toggles the "new appointment" form
+                showAppointmentCreateForm(!!state.appointmentCreate);
+
+                can.batch.stop();
             },
 
-            ///////////////////////////////////////////////////////////////////
+            ///////////////////////////////////////////////////////////////////////////////////////
+            // Events
+
+            // @TODO
+
+            ///////////////////////////////////////////////////////////////////////////////////////
             // Routes
 
             // Routes with special params come first
