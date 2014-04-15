@@ -7,6 +7,9 @@ steal(
     './appointments-app.mustache',
     './appointment-create-form.mustache',
 
+    // Components
+    'appointments-app/appointment-list',
+
     // Some useful canjs plugins
     'can/construct/super',
     'can/map/sort',

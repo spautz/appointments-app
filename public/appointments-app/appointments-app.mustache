@@ -1,18 +1,6 @@
 {{#if futureAppointmentList}}
   <h2>Scheduled Appointments</h2>
-  <ul>
-    {{#each futureAppointmentList}}
-      <li>
-        <a href="/appointment/{{id}}">
-            {{note}}
-        </a>
-        - {{doctor.name}}
-          {{#if selected}}
-            (selected)
-          {{/if}}
-      </li>
-    {{/each}}
-  </ul>
+  <appointment-list appointments="futureAppointmentList"></appointment-list>
 {{else}}
   <div class="alert alert-info">
     You have no appointments scheduled.
@@ -29,17 +17,5 @@
 
 {{#if pastAppointmentList}}
   <h2>Past Appointments</h2>
-  <ul>
-    {{#each pastAppointmentList}}
-      <li>
-        <a href="/appointment/{{id}}">
-          {{note}}
-        </a>
-        - {{doctor.name}}
-        {{#if selected}}
-          (selected)
-        {{/if}}
-      </li>
-    {{/each}}
-  </ul>
+  <appointment-list appointments="pastAppointmentList"></appointment-list>
 {{/if}}

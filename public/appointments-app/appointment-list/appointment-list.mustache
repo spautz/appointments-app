@@ -1,0 +1,13 @@
+<ul>
+  {{#each appointments}}
+    <li>
+      <a href="/appointment/{{id}}">
+        {{note}}
+      </a>
+      - {{doctor.name}}
+      {{#if selected}}
+        (selected)
+      {{/if}}
+    </li>
+  {{/each}}
+</ul>
