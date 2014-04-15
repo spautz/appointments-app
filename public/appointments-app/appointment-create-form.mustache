@@ -1,4 +1,37 @@
-(appointment create form goes here)
+<form class="appointment-create-form form-horizontal">
+  <fieldset>
+    <legend>Request an Appointment</legend>
 
-<button type="submit" class="btn btn-primary">Request Appointment</button>
-<a href="/" class="btn btn-link">Cancel</a>
+    <div class="form-group">
+      <label for="note" class="col-sm-1 control-label">Note</label>
+      <div class="col-sm-5">
+        <input type="text" class="form-control" id="note" name="note">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="date" class="col-sm-1 control-label">Date</label>
+      <div class="col-sm-3">
+        <input type="date" class="form-control" id="date" name="date">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="doctor" class="col-sm-1 control-label">Doctor</label>
+      <div class="col-sm-3">
+        <select class="form-control" id="doctor" name="doctor">
+          <option value="Dr. Alice">Dr. Alice Adams</option>
+          <option value="Dr. Bob">Dr. Bob Brown</option>
+          <option value="Dr. Charlotte">Dr. Charlotte Carpenter</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-sm-5 col-sm-offset-1">
+        <button type="submit" class="btn btn-primary">Request Appointment</button>
+        <button type="reset" class="btn btn-link">Cancel</button>
+      </div>
+    </div>
+  </fieldset>
+</form>

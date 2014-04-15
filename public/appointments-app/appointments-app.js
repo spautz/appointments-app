@@ -142,7 +142,34 @@ steal(
             ///////////////////////////////////////////////////////////////////////////////////////
             // Events
 
-            // @TODO
+            '.appointment-create-form submit': function($form, e) {
+                // Make a new appointment, if everything's good to go
+                var formFields = $form.serializeArray();
+                var newAppointmentData = {};
+
+                // this snippet just gives us an autoincremented id
+                newAppointmentData.id = _.max(_.pluck(appointmentList, 'id')) + 1;
+
+                _.each(formFields, function(field) {
+                    newAppointmentData[field.name] = field.value;
+                });
+
+                // @TODO: Real models and fixtures
+                appointmentList.push(newAppointmentData);
+
+                this.goHome();
+                e.preventDefault();
+                e.stopPropagation();
+            },
+
+            // We treat the 'reset' event as the form's cancel
+            // (We could also just use a link to '/', or an attribute like can-click="goHome",
+            // but this keeps our form's 'reset' code next to its 'submit' code.
+            '.appointment-create-form reset': function($form, e) {
+                this.goHome();
+                e.preventDefault();
+                e.stopPropagation();
+            },
 
             ///////////////////////////////////////////////////////////////////////////////////////
             // Routes

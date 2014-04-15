@@ -1,10 +1,8 @@
-<h1>Your Appointments</h1>
-
 {{#if showAppointmentCreateForm}}
   {{>appointmentCreateForm}}
 {{else}}
   <a href="/appointment/new" class="btn btn-info">
-    Request Appointment
+    Request an Appointment
   </a>
 {{/if}}
 
@@ -12,7 +10,10 @@
   <ul>
     {{#each appointmentsList}}
       <li>
-        {{doctor}}
+        <a href="/appointment/{{id}}">
+          {{note}}
+        </a>
+        - {{doctor}}
         {{#if selected}}
           (selected)
         {{/if}}
