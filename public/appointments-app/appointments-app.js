@@ -7,6 +7,10 @@ steal(
     // Local views
     './appointments-app.mustache',
 
+    // Models
+    'appointments-app/models/appointment',
+    'appointments-app/models/doctor',
+
     // Components
     'appointments-app/appointment-list',
     'appointments-app/appointment-create-form',
@@ -16,7 +20,7 @@ steal(
     'can/map/sort',
     'can/route/pushstate',
 
-    function (can, moment, $, _, layoutTmpl) {
+    function (can, moment, $, _, layoutTmpl, AppointmentModel, DoctorModel) {
         'use strict';
 
         // This is the top-level control for the app: it handles routing and the initial
@@ -38,7 +42,7 @@ steal(
         // and easy for this demo.
 
         // @TODO: Real models and fixtures
-        var doctorList = new can.List([
+        var doctorList = new DoctorModel.List([
             {
                 id: 1,
                 name: 'Dr. Alice Adams'
@@ -53,7 +57,7 @@ steal(
 
         // @TODO: Real models and fixtures, and nice references to doctors (instead of hardcoded
         // array indices)
-        var rawAppointmentList = new can.List([
+        var rawAppointmentList = new AppointmentModel.List([
             {
                 id: 1,
                 note: '2011 Annual checkup',
