@@ -1,5 +1,5 @@
 {{#if futureAppointmentList}}
-  <h2>Scheduled Appointments</h2>
+  <h3>Upcoming Appointments</h3>
   <appointment-list appointments="futureAppointmentList"></appointment-list>
 {{else}}
   <div class="alert alert-info">
@@ -16,6 +16,6 @@
 {{/if}}
 
 {{#if pastAppointmentList}}
-  <h2>Past Appointments</h2>
+  <h3>Appointment History</h3>
   <appointment-list appointments="pastAppointmentList"></appointment-list>
 {{/if}}

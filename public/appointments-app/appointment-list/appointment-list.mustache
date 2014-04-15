@@ -1,13 +1,17 @@
-<ul>
+<div class="list-group">
   {{#each appointments}}
-    <li>
-      <a href="/appointment/{{id}}">
+    <a href="/appointment/{{id}}" class="list-group-item {{#if selected}}active{{/if}}">
+      <h4 class="list-group-item-heading">
         {{note}}
-      </a>
-      - {{doctor.name}}
+        <span class="badge">{{relativeDate date}}</span>
+      </h4>
       {{#if selected}}
-        (selected)
+        <div class="list-group-item-text">
+          <p>Date: {{rawDate date}}</p>
+          <p>Time: {{rawTime date}}</p>
+          <p>Doctor: {{doctor.name}}</p>
+        </div>
       {{/if}}
-    </li>
+    </a>
   {{/each}}
-</ul>
+</div>

@@ -18,6 +18,22 @@ steal(
             scope: {
                 appointments: []
             },
+            helpers: {
+                rawDate: function(value) {
+                    var date = value.isComputed ? value() : value;
+                    return date.toLocaleDateString();
+                    return date.toLocaleString();
+                },
+                rawTime: function(value) {
+                    var date = value.isComputed ? value() : value;
+                    return date.toLocaleTimeString();
+                },
+                // @TODO
+                relativeDate: function(value) {
+                    var date = value.isComputed ? value() : value;
+                    return date.toLocaleDateString();
+                }
+            },
             events: {
             }
         });

@@ -55,17 +55,17 @@ steal(
         var rawAppointmentList = new can.List([
             {
                 id: 1,
-                note: 'Annual checkup',
+                note: '2011 Annual checkup',
                 date: new Date(2011, 1, 10, 1, 0),
                 doctor: doctorList[2]
             }, {
                 id: 2,
-                note: 'Annual checkup',
+                note: '2012 Annual checkup',
                 date: new Date(2012, 2, 15, 12, 0),
                 doctor: doctorList[1]
             }, {
                 id: 3,
-                note: 'Annual checkup',
+                note: '2013 Annual checkup',
                 date: new Date(2013, 4, 5, 8, 0),
                 doctor: doctorList[1]
             }, {
