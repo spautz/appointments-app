@@ -19,7 +19,8 @@ steal(
             template: appointmentCreateFormTmpl,
             scope: {
                 appointmentList: [],
-                doctorList: []
+                doctorList: [],
+                errorMessage: null
             },
             // Note: these events *could* be specified via `can-submit` and `can-reset`
             // attributes, referencing functions defined on the scope above.
@@ -27,23 +28,45 @@ steal(
                 submit: function ($form, e) {
                     var appointmentList = this.scope.attr('appointmentList');
                     var doctorList = this.scope.attr('doctorList');
+                    var errorMessage;
 
-                    // Make a new appointment, if everything's good to go
+                    // Make a new appointment, if everything's good to go.
+                    // Normally we'd just use a jquery plugin or something to get the
+                    // form fields as a single object: doing a bunch of .find() and .val()
+                    // lookups is awful for anything but a proof-of-concept.
                     var newAppointmentData = {
                         // autoincrement the id
                         id: _.max(_.pluck(appointmentList, 'id')) + 1,
                         // other fields are used more or less as-is
                         note: $form.find('#note').val(),
-                        date: moment( $form.find('#date').val() ),
+                        date: moment(
+                            $form.find('#date').val() + ' ' + $form.find('#time').val()
+                        ),
                         doctor: doctorList[ $form.find('#doctor').val() ]
                     };
 
-                    // @TODO: Real models and fixtures
-                    appointmentList.push(newAppointmentData);
+                    // Silly pretend validation: inline but not *too* terrible.
+                    // This really belongs on the model, though.
+                    if (!newAppointmentData.note) {
+                        errorMessage = 'Please enter a note for this appointment';
+                    } else if (!newAppointmentData.date.isValid()) {
+                        errorMessage = 'Please enter a valid date';
+                        // @TODO: Maybe make sure it's at a reasonable hour
+                    } else if (!newAppointmentData.doctor) {
+                        errorMessage = 'Please select a doctor';
+                    }
 
                     e.preventDefault();
                     e.stopPropagation();
-                    window.history.pushState({}, '', '/');
+
+                    if (errorMessage) {
+                        this.scope.attr('errorMessage', errorMessage);
+                    } else {
+                        // @TODO: Real models and fixtures
+                        this.scope.attr('errorMessage', null);
+                        appointmentList.push(newAppointmentData);
+                        window.history.pushState({}, '', '/');
+                    }
                 },
 
                 // We treat the 'reset' event as the form's cancel
