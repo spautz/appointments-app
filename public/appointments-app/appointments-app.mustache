@@ -1,3 +1,24 @@
+{{#if futureAppointmentList}}
+  <h2>Scheduled Appointments</h2>
+  <ul>
+    {{#each futureAppointmentList}}
+      <li>
+        <a href="/appointment/{{id}}">
+            {{note}}
+        </a>
+        - {{doctor.name}}
+          {{#if selected}}
+            (selected)
+          {{/if}}
+      </li>
+    {{/each}}
+  </ul>
+{{else}}
+  <div class="alert alert-info">
+    You have no appointments scheduled.
+  </div>
+{{/if}}
+
 {{#if showAppointmentCreateForm}}
   {{>appointmentCreateForm}}
 {{else}}
@@ -6,22 +27,19 @@
   </a>
 {{/if}}
 
-{{#if appointmentsList.length}}
+{{#if pastAppointmentList}}
+  <h2>Past Appointments</h2>
   <ul>
-    {{#each appointmentsList}}
+    {{#each pastAppointmentList}}
       <li>
         <a href="/appointment/{{id}}">
           {{note}}
         </a>
-        - {{doctor}}
+        - {{doctor.name}}
         {{#if selected}}
           (selected)
         {{/if}}
       </li>
     {{/each}}
   </ul>
-{{else}}
-  <div class="alert alert-info">
-    You have not scheduled any appointments yet.
-  </div>
 {{/if}}

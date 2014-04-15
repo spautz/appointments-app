@@ -9,6 +9,7 @@ steal(
 
     // Some useful canjs plugins
     'can/construct/super',
+    'can/map/sort',
     'can/route/pushstate',
 
     function (can, $, _, layoutTmpl, appointmentCreateFormTmpl) {
@@ -33,29 +34,67 @@ steal(
         // and easy for this demo.
 
         // @TODO: Real models and fixtures
-        var appointmentList = new can.List([
+        var doctorList = new can.List([
+            {
+                id: 1,
+                name: 'Dr. Alice Adams'
+            }, {
+                id: 2,
+                name: 'Dr. Bob Brown'
+            }, {
+                id: 3,
+                name: 'Dr. Charlotte Carpenter'
+            }
+        ]);
+
+        // @TODO: Real models and fixtures, and nice references to doctors (instead of hardcoded
+        // array indices)
+        var rawAppointmentList = new can.List([
             {
                 id: 1,
                 note: 'Annual checkup',
                 date: new Date(2011, 1, 10, 1, 0),
-                doctor: 'Dr. Charlotte'
+                doctor: doctorList[2]
             }, {
                 id: 2,
                 note: 'Annual checkup',
                 date: new Date(2012, 2, 15, 12, 0),
-                doctor: 'Dr. Bob'
+                doctor: doctorList[1]
             }, {
                 id: 3,
                 note: 'Annual checkup',
                 date: new Date(2013, 4, 5, 8, 0),
-                doctor: 'Dr. Bob'
+                doctor: doctorList[1]
             }, {
                 id: 4,
                 note: 'Interview',
-                date: new Date(2014, 3, 9, 12, 15),
-                doctor: 'Dr. Alice'
+                date: new Date(2014, 3, 16, 12, 15),
+                doctor: doctorList[0]
             }
         ]);
+
+        // appointmentList is the raw data source; these two lists are derived from it
+        var futureAppointmentList = can.compute(function() {
+            var now = (Date.now && Date.now()) || new Date().getTime();
+
+            return rawAppointmentList.filter(function(appointment) {
+                return appointment.attr('date') >= now;
+            }).sort(function(appointment1, appointment2) {
+                // newest first
+                return appointment1.date < appointment2.date;
+            });
+        });
+        var pastAppointmentList = can.compute(function() {
+            var now = (Date.now && Date.now()) || new Date().getTime();
+
+            return rawAppointmentList.filter(function(appointment) {
+                return appointment.attr('date') < now;
+            }).sort(function(appointment1, appointment2) {
+                // newest first
+                return appointment1.date < appointment2.date;
+            });
+        });
+
         // This tracks the appointment we're viewing details for, if any.
         // This gets called as a setter only; it basically just ensures we only have one
         // appointment selected at a given time.
@@ -86,7 +125,10 @@ steal(
                 // Manual rendering is awkward and weird. Let's do it anyway.
                 this.element.html(
                     layoutTmpl({
-                        appointmentsList: appointmentList,
+                        rawAppointmentList: rawAppointmentList,
+                        futureAppointmentList: futureAppointmentList,
+                        pastAppointmentList: pastAppointmentList,
+                        doctorList: doctorList,
                         appointmentSelected: appointmentSelected,
                         showAppointmentCreateForm: showAppointmentCreateForm
                     }, {
@@ -126,7 +168,7 @@ steal(
                 // select a new appointment (if any), or deselect the old
                 if (state.id) {
                     appointmentSelected(_.findWhere(
-                        appointmentList,
+                        rawAppointmentList,
                         { id: parseInt(state.id, 10) }
                     ));
                 } else {
@@ -144,18 +186,17 @@ steal(
 
             '.appointment-create-form submit': function($form, e) {
                 // Make a new appointment, if everything's good to go
-                var formFields = $form.serializeArray();
-                var newAppointmentData = {};
-
-                // this snippet just gives us an autoincremented id
-                newAppointmentData.id = _.max(_.pluck(appointmentList, 'id')) + 1;
-
-                _.each(formFields, function(field) {
-                    newAppointmentData[field.name] = field.value;
-                });
+                var newAppointmentData = {
+                    // autoincrement the id
+                    id: _.max(_.pluck(rawAppointmentList, 'id')) + 1,
+                    // other fields are used more or less as-is
+                    note: $form.find('#note').val(),
+                    date: new Date( $form.find('#date').val() ),
+                    doctor: doctorList[ $form.find('#doctor').val() ]
+                };
 
                 // @TODO: Real models and fixtures
-                appointmentList.push(newAppointmentData);
+                rawAppointmentList.push(newAppointmentData);
 
                 this.goHome();
                 e.preventDefault();

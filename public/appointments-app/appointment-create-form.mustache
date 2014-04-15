@@ -20,9 +20,9 @@
       <label for="doctor" class="col-sm-1 control-label">Doctor</label>
       <div class="col-sm-3">
         <select class="form-control" id="doctor" name="doctor">
-          <option value="Dr. Alice">Dr. Alice Adams</option>
-          <option value="Dr. Bob">Dr. Bob Brown</option>
-          <option value="Dr. Charlotte">Dr. Charlotte Carpenter</option>
+          {{#each doctorList}}
+            <option value="{{@index}}">{{name}}</option>
+          {{/each}}
         </select>
       </div>
     </div>
