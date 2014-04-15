@@ -19,19 +19,20 @@ steal(
                 appointments: []
             },
             helpers: {
+                // In practice, these would probably be *global* template helpers,
+                // not local as they are here.
                 rawDate: function(value) {
                     var date = value.isComputed ? value() : value;
-                    return date.toLocaleDateString();
-                    return date.toLocaleString();
+                    return date.format('M/D/YYYY');
                 },
                 rawTime: function(value) {
                     var date = value.isComputed ? value() : value;
-                    return date.toLocaleTimeString();
+                    return date.format('h:mm a');
                 },
                 // @TODO
                 relativeDate: function(value) {
                     var date = value.isComputed ? value() : value;
-                    return date.toLocaleDateString();
+                    return date.calendar();
                 }
             },
             events: {

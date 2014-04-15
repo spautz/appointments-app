@@ -1,12 +1,13 @@
 steal(
     'can',
+    'moment',
     'jquery',
     'underscore',
 
     // Local views
     './appointment-create-form.mustache',
 
-    function (can, $, _, appointmentCreateFormTmpl) {
+    function (can, moment, $, _, appointmentCreateFormTmpl) {
         'use strict';
 
         // can.Component is basically Web Components for Mustache templates.
@@ -33,7 +34,7 @@ steal(
                         id: _.max(_.pluck(appointmentList, 'id')) + 1,
                         // other fields are used more or less as-is
                         note: $form.find('#note').val(),
-                        date: new Date($form.find('#date').val()),
+                        date: moment( $form.find('#date').val() ),
                         doctor: doctorList[ $form.find('#doctor').val() ]
                     };
 

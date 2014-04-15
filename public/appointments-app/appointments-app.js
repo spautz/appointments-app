@@ -1,5 +1,6 @@
 steal(
     'can',
+    'moment',
     'jquery',
     'underscore',
 
@@ -15,7 +16,7 @@ steal(
     'can/map/sort',
     'can/route/pushstate',
 
-    function (can, $, _, layoutTmpl) {
+    function (can, moment, $, _, layoutTmpl) {
         'use strict';
 
         // This is the top-level control for the app: it handles routing and the initial
@@ -56,22 +57,22 @@ steal(
             {
                 id: 1,
                 note: '2011 Annual checkup',
-                date: new Date(2011, 1, 10, 1, 0),
+                date: moment('2011-01-10T13:00'),
                 doctor: doctorList[2]
             }, {
                 id: 2,
                 note: '2012 Annual checkup',
-                date: new Date(2012, 2, 15, 12, 0),
+                date: moment('2012-03-15T12:00'),
                 doctor: doctorList[1]
             }, {
                 id: 3,
                 note: '2013 Annual checkup',
-                date: new Date(2013, 4, 5, 8, 0),
+                date: moment('2013-05-05T08:00'),
                 doctor: doctorList[1]
             }, {
                 id: 4,
                 note: 'Interview',
-                date: new Date(2014, 3, 16, 12, 15),
+                date: moment('2014-04-16T12:15'),
                 doctor: doctorList[0]
             }
         ]);

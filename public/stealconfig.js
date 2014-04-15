@@ -19,12 +19,16 @@ steal.config({
         'bootstrap/': 'bower_components/bootstrap/',
         'can/': 'bower_components/canjs/steal/canjs/',
         'jquery/': 'bower_components/jquery/dist/',
+        'moment/': 'bower_components/moment/',
         'underscore/': 'bower_components/underscore/'
     },
     // 3rd party libraries which put their stuff into the global namespace
     shim: {
         'jquery': {
             exports: 'jQuery'
+        },
+        'moment': {
+            exports: 'moment'
         },
         'underscore/underscore.js': {
             exports: '_'
