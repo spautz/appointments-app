@@ -16,9 +16,10 @@
   "//": "Note: .bowerrc sets the output directory to `public/bower_components`",
   "dependencies": {},
   "devDependencies": {
-    "bootstrap":    "3.x",
-    "canjs":        "minor",
-    "html5shiv":    "3.x",
-    "underscore":   "1.x"
+    "bootstrap": "3.x",
+    "canjs": "minor",
+    "html5shiv": "3.x",
+    "moment": "~2.x",
+    "underscore": "1.x"
   }
 }
