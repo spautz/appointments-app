@@ -5,17 +5,17 @@ steal(
 
     // Local views
     './appointments-app.mustache',
-    './appointment-create-form.mustache',
 
     // Components
     'appointments-app/appointment-list',
+    'appointments-app/appointment-create-form',
 
     // Some useful canjs plugins
     'can/construct/super',
     'can/map/sort',
     'can/route/pushstate',
 
-    function (can, $, _, layoutTmpl, appointmentCreateFormTmpl) {
+    function (can, $, _, layoutTmpl) {
         'use strict';
 
         // This is the top-level control for the app: it handles routing and the initial
@@ -103,7 +103,6 @@ steal(
         // appointment selected at a given time.
         var appointmentSelected = can.compute(null, function(newVal, oldVal) {
             // deselect the old, select the new
-            console.log('appointmentSelected()', arguments, this);
             if (oldVal) {
                 oldVal.attr('selected', false);
             }
@@ -134,23 +133,11 @@ steal(
                         doctorList: doctorList,
                         appointmentSelected: appointmentSelected,
                         showAppointmentCreateForm: showAppointmentCreateForm
-                    }, {
-                        partials: {
-                            appointmentCreateForm: appointmentCreateFormTmpl
-                        }
                     })
                 );
 
                 // This will fire one of the 'route' events below
                 can.route.ready();
-            },
-
-            /**
-             * This is just sugar for returning to the App's default view.
-             * We update the route, which triggers setAppState.
-             */
-            goHome: function() {
-                window.history.pushState({}, '', '/');
             },
 
             /**
@@ -182,37 +169,6 @@ steal(
                 showAppointmentCreateForm(!!state.appointmentCreate);
 
                 can.batch.stop();
-            },
-
-            ///////////////////////////////////////////////////////////////////////////////////////
-            // Events
-
-            '.appointment-create-form submit': function($form, e) {
-                // Make a new appointment, if everything's good to go
-                var newAppointmentData = {
-                    // autoincrement the id
-                    id: _.max(_.pluck(rawAppointmentList, 'id')) + 1,
-                    // other fields are used more or less as-is
-                    note: $form.find('#note').val(),
-                    date: new Date( $form.find('#date').val() ),
-                    doctor: doctorList[ $form.find('#doctor').val() ]
-                };
-
-                // @TODO: Real models and fixtures
-                rawAppointmentList.push(newAppointmentData);
-
-                this.goHome();
-                e.preventDefault();
-                e.stopPropagation();
-            },
-
-            // We treat the 'reset' event as the form's cancel
-            // (We could also just use a link to '/', or an attribute like can-click="goHome",
-            // but this keeps our form's 'reset' code next to its 'submit' code.
-            '.appointment-create-form reset': function($form, e) {
-                this.goHome();
-                e.preventDefault();
-                e.stopPropagation();
             },
 
             ///////////////////////////////////////////////////////////////////////////////////////

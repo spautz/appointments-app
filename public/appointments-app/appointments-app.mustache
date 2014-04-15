@@ -8,7 +8,7 @@
 {{/if}}
 
 {{#if showAppointmentCreateForm}}
-  {{>appointmentCreateForm}}
+  <appointment-create-form appointment-list="rawAppointmentList" doctor-list="doctorList"></appointment-create-form>
 {{else}}
   <a href="/appointment/new" class="btn btn-info">
     Request an Appointment
